@@ -1,10 +1,10 @@
 package com.mercuryCyclists.Inventory.entity;
 
 import lombok.Data;
-import lombok.ToString;
+
 
 import javax.persistence.*;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "Part")
@@ -16,4 +16,6 @@ public class Part {
     //    @Column(unique = true)
     private String name;
     private String description;
+    private Long supplierId;
+    private Long quantity;
 }

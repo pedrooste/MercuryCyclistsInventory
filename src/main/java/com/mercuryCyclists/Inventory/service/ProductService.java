@@ -117,4 +117,15 @@ public class ProductService {
         if (product == null) return null;
         return product.getSet();
     }
+
+    /**
+     * Delete a part with given product id and part id
+     * @param productId
+     * @param partId
+     */
+    public void deletePart(Long productId, Long partId) {
+        Product product = productExist(productId);
+        if (product == null) return;
+        partRepository.deleteById(partId);
+    }
 }
