@@ -3,6 +3,7 @@ package com.mercuryCyclists.Inventory.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +14,10 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @Column(unique = true)
+    @Column(nullable = false)
     private String name;
+    @PositiveOrZero(message = "Price must be >= 0")
+    @Column(nullable = false)
     private Double price;
     private String comment;
     @OneToMany(targetEntity = Part.class, cascade = CascadeType.ALL)

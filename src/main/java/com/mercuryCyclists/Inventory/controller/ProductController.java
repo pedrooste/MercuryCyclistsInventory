@@ -86,13 +86,14 @@ public class ProductController {
     /**
      * Update a part with given part ID restful api
      *
-     * @param id
+     * @param productId
+     * @param partId
      * @param part
      * @return a part with updated details
      */
-    @PutMapping("/{id}/part")
-    public ResponseEntity<Part> updatePart(@PathVariable Long id, @RequestBody Part part) {
-        return new ResponseEntity<>(productService.updatePart(id, part), HttpStatus.OK);
+    @PutMapping("/{productId}/part/{partId}")
+    public ResponseEntity<Part> updatePart(@PathVariable("productId") Long productId, @PathVariable("partId") Long partId, @RequestBody Part part) {
+        return new ResponseEntity<>(productService.updatePart(productId, partId, part), HttpStatus.OK);
     }
 
     /**

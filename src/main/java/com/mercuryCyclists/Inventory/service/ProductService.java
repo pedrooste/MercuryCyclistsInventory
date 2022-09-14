@@ -94,14 +94,26 @@ public class ProductService {
     }
 
     /**
+     * Update part helper method
+     * @param product
+     * @param part
+     * @return If given product contains given part return true else false
+     */
+    private boolean updatePartHelper(Product product, Part part) {
+        return product.getSet().contains(part);
+    }
+
+    /**
      * Update a part with given ID
-     * @param id
+     * @param productId
+     * @param partId
      * @param part
      * @return a part with updated details
      */
-    public Part updatePart(Long id, Part part) {
-        Part p = partRepository.findById(id).orElse(null);
-        if (p == null) return null;
+    public Part updatePart(Long productId, Long partId, Part part) {
+        Product product = productRepository.findById(productId).orElse(null);
+        Part p = partRepository.findById(partId).orElse(null);
+        if (p == null || product == null || !updatePartHelper(product, p)) return null;
         p.setName(part.getName());
         p.setDescription(part.getDescription());
         return partRepository.save(p);
