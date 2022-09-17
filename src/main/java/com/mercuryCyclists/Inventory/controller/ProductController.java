@@ -3,11 +3,9 @@ package com.mercuryCyclists.Inventory.controller;
 import com.mercuryCyclists.Inventory.entity.Part;
 import com.mercuryCyclists.Inventory.entity.Product;
 import com.mercuryCyclists.Inventory.service.ProductService;
-import com.mercuryCyclists.Inventory.service.RestfulService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 import java.util.Set;
@@ -16,11 +14,9 @@ import java.util.Set;
 @RequestMapping("api/v1/product")
 public class ProductController {
     private ProductService productService;
-    private RestfulService restfulService;
 
-    public ProductController(ProductService productService, RestfulService restfulService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.restfulService = restfulService;
     }
 
     /**
@@ -74,21 +70,6 @@ public class ProductController {
     }
 
     /**
-     * Helper method, check if a supplier id is valid
-     *
-     * @param supplierId
-     * @return true if id is valid else false
-     */
-    private boolean validSupplier(Long supplierId) {
-        try {
-            restfulService.getSupplier(supplierId).getStatusCodeValue();
-            return true;
-        } catch (HttpServerErrorException e) {
-            return false;
-        }
-    }
-
-    /**
      * Add part with given product id restful api
      *
      * @param productId
@@ -97,8 +78,6 @@ public class ProductController {
      */
     @PostMapping("/{id}/part")
     public ResponseEntity<String> addPart(@PathVariable("id") Long productId, @RequestBody Part part) {
-        if (!validSupplier(part.getSupplierId()))
-            return new ResponseEntity<>("Fail to add part", HttpStatus.FAILED_DEPENDENCY);
         if (productService.addPart(productId, part))
             return new ResponseEntity<>("Part added", HttpStatus.CREATED);
         return new ResponseEntity<>("Fail to add part", HttpStatus.FAILED_DEPENDENCY);
@@ -114,8 +93,6 @@ public class ProductController {
      */
     @PutMapping("/{productId}/part/{partId}")
     public ResponseEntity<Part> updatePart(@PathVariable("productId") Long productId, @PathVariable("partId") Long partId, @RequestBody Part part) {
-        if (!validSupplier(part.getSupplierId()))
-            return new ResponseEntity<>(null, HttpStatus.FAILED_DEPENDENCY);
         return new ResponseEntity<>(productService.updatePart(productId, partId, part), HttpStatus.OK);
     }
 
