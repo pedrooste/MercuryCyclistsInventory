@@ -1,10 +1,11 @@
 package com.mercuryCyclists.Inventory.entity;
 
 import lombok.Data;
-import lombok.ToString;
+
 
 import javax.persistence.*;
-import java.util.Objects;
+import javax.validation.constraints.PositiveOrZero;
+
 
 @Entity
 @Table(name = "Part")
@@ -13,7 +14,12 @@ public class Part {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //    @Column(unique = true)
+    @Column(nullable = false)
     private String name;
     private String description;
+    @Column(nullable = false)
+    private Long supplierId;
+    @PositiveOrZero(message = "Quantity must be >= 0")
+    @Column(nullable = false)
+    private Long quantity;
 }

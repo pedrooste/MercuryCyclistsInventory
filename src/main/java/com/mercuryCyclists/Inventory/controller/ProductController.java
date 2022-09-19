@@ -71,11 +71,12 @@ public class ProductController {
 
     /**
      * Add part with given product id restful api
+     *
      * @param productId
      * @param part
      * @return true if succeeded else false
      */
-    @PostMapping("/part/{id}")
+    @PostMapping("/{id}/part")
     public ResponseEntity<String> addPart(@PathVariable("id") Long productId, @RequestBody Part part) {
         if (productService.addPart(productId, part))
             return new ResponseEntity<>("Part added", HttpStatus.CREATED);
@@ -84,22 +85,31 @@ public class ProductController {
 
     /**
      * Update a part with given part ID restful api
-     * @param id
+     *
+     * @param productId
+     * @param partId
      * @param part
      * @return a part with updated details
      */
-    @PutMapping("/part/{id}")
-    public ResponseEntity<Part> updatePart(@PathVariable Long id, @RequestBody Part part) {
-        return new ResponseEntity<>(productService.updatePart(id, part), HttpStatus.OK);
+    @PutMapping("/{productId}/part/{partId}")
+    public ResponseEntity<Part> updatePart(@PathVariable("productId") Long productId, @PathVariable("partId") Long partId, @RequestBody Part part) {
+        return new ResponseEntity<>(productService.updatePart(productId, partId, part), HttpStatus.OK);
     }
 
     /**
      * Get all parts with given product id restful api
+     *
      * @param id
      * @return all parts of a product
      */
-    @GetMapping("{id}/all-parts")
+    @GetMapping("{id}/part")
     public Set<Part> getAllPartsByProductId(@PathVariable Long id) {
         return productService.getAllPartsByProductId(id);
+    }
+
+    @DeleteMapping("{productId}/part/{partId}")
+    public ResponseEntity<String> deletePart(@PathVariable("productId") Long productId, @PathVariable("partId") Long partId) {
+        productService.deletePart(productId, partId);
+        return new ResponseEntity<>("Delete Successful", HttpStatus.OK);
     }
 }
