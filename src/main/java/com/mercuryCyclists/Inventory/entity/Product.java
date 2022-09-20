@@ -20,6 +20,8 @@ public class Product {
     @Column(nullable = false)
     private Double price;
     private String comment;
+    @Column(nullable = false)
+    private Long quantity;
     @OneToMany(targetEntity = Part.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "partFk", referencedColumnName = "id")
     private Set<Part> set = new HashSet<>();
