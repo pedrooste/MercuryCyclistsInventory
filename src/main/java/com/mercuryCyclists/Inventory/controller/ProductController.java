@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("api/v1/product")
+    @RequestMapping("api/v1/product")
 public class ProductController {
     private ProductService productService;
 
@@ -46,7 +46,7 @@ public class ProductController {
      * @param id
      * @return a response about product with given id
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable("id") Long id) {
         return new ResponseEntity<>(productService.getProduct(id), HttpStatus.OK);
     }
@@ -58,12 +58,12 @@ public class ProductController {
      * @param id
      * @return a response about product with updated details
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable Long id) {
         return new ResponseEntity<>(productService.updateProduct(product, id), HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>("Delete Successful", HttpStatus.OK);
