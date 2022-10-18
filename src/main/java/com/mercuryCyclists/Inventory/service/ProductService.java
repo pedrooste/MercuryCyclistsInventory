@@ -4,11 +4,13 @@ import com.mercuryCyclists.Inventory.entity.Part;
 import com.mercuryCyclists.Inventory.entity.Product;
 import com.mercuryCyclists.Inventory.repository.PartRepository;
 import com.mercuryCyclists.Inventory.repository.ProductRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
-
+import com.google.gson.*;
 import java.util.List;
 import java.util.Set;
+import org.springframework.kafka.core.KafkaTemplate;
 
 @Service
 public class ProductService {
@@ -16,10 +18,13 @@ public class ProductService {
     private PartRepository partRepository;
     private RestfulService restfulService;
 
-    public ProductService(ProductRepository productRepository, PartRepository partRepository, RestfulService restfulService) {
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public ProductService(ProductRepository productRepository, PartRepository partRepository, RestfulService restfulService, KafkaTemplate<String, String> kafkaTemplate) {
         this.productRepository = productRepository;
         this.partRepository = partRepository;
         this.restfulService = restfulService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     /**
@@ -171,5 +176,16 @@ public class ProductService {
         Product product = productExist(productId);
         if (product == null) return;
         partRepository.deleteById(partId);
+    }
+
+    /**
+     * Adds backorder in procurement service
+     * @param sale
+     * @return
+     */
+    public boolean addBackOrder(String sale) {
+        kafkaTemplate.send("backorder", sale);
+
+        return true;
     }
 }

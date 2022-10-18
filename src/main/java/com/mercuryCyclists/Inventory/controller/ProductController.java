@@ -112,4 +112,9 @@ public class ProductController {
         productService.deletePart(productId, partId);
         return new ResponseEntity<>("Delete Successful", HttpStatus.OK);
     }
+
+    @PostMapping("/backorder")
+    public boolean createBackOrderSale(@RequestBody String sale) {
+        return productService.addBackOrder(sale);
+    }
 }
