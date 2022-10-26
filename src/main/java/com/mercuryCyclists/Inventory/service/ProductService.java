@@ -64,6 +64,8 @@ public class ProductService {
             p.setName(product.getName());
             p.setComment(product.getComment());
             p.setPrice(product.getPrice());
+            p.setSet(product.getSet());
+            p.setQuantity(product.getQuantity());
             productRepository.save(p);
         }
         return p;
@@ -171,5 +173,32 @@ public class ProductService {
         Product product = productExist(productId);
         if (product == null) return;
         partRepository.deleteById(partId);
+    }
+
+    /**
+     * Check if a product exists and has sufficient stock
+     * @param productId
+     * @param quantity
+     * @return true if a product exists and has sufficient stock else false
+     */
+    public boolean checkProductQuantity(Long productId, Long quantity) {
+        Product product = getProduct(productId);
+        if (product == null) return false;
+        if (product.getQuantity() < quantity) return false;
+        return true;
+    }
+
+    /**
+     * Check if a product exists and parts of the existed product have sufficient stock
+     * @param productId
+     * @param quantity
+     * @return true if all conditions are satisfied else false
+     */
+    public boolean checkPartQuantity(Long productId, Long quantity) {
+        if (getProduct(productId) == null) return false;
+        for (Part part : getAllPartsByProductId(productId)) {
+            if (part.getQuantity() < quantity) return false;
+        }
+        return true;
     }
 }
