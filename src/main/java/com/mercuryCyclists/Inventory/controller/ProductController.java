@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-    @RequestMapping("api/v1/product")
+@RequestMapping("api/v1/product")
 public class ProductController {
     private ProductService productService;
 
@@ -113,7 +113,22 @@ public class ProductController {
         return new ResponseEntity<>("Delete Successful", HttpStatus.OK);
     }
 
-    @PostMapping("/backorder")
+    // Get product with quantity
+    @GetMapping("{productId}/quantity/{quantity}")
+    public Product getProductWithQuantity(@PathVariable("productId") Long productId, @PathVariable("quantity") Long quantity) {
+        if (productService.checkProductQuantity(productId, quantity)) return productService.getProduct(productId);
+        return null;
+    }
+
+    // get all parts of a product with quantity
+    @GetMapping("{productId}/part/quantity/{quantity}")
+    public Set<Part> getAllPartsByProductIdWithQuantity(@PathVariable("productId") Long productId, @PathVariable("quantity") Long quantity) {
+        if (productService.checkPartQuantity(productId, quantity))
+            return productService.getAllPartsByProductId(productId);
+        return null;
+    }
+
+  @PostMapping("/backorder")
     public boolean createBackOrderSale(@RequestBody String sale) {
         return productService.addBackOrder(sale);
     }
