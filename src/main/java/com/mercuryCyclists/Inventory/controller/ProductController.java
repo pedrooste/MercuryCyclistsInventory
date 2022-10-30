@@ -127,4 +127,9 @@ public class ProductController {
             return productService.getAllPartsByProductId(productId);
         return null;
     }
+
+  @PostMapping("/backorder")
+    public boolean createBackOrderSale(@RequestBody String sale) {
+        return productService.addBackOrder(sale);
+    }
 }
